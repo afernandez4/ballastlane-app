@@ -1,0 +1,23 @@
+# Java / Maven
+backend/target/
+*.class
+*.log
+.mvn/wrapper/maven-wrapper.jar.bak
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+task-api/node_modules/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+.DS_Store
+
+# Environment (keep the example only)
+.env
+backend/.env
+frontend/.env.local

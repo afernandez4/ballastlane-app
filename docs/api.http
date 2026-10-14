@@ -1,0 +1,55 @@
+### Variables (cambia el host si usas Docker en otro puerto: 8080 local, 8082 en el compose de pruebas)
+@host = http://localhost:8080
+@token = PEGA_AQUI_EL_TOKEN
+
+### Catálogo (público)
+GET {{host}}/api/v1/pokeapi/pokemon?page=0&size=20
+
+### Detalle por id o nombre (público)
+GET {{host}}/api/v1/pokeapi/pokemon/pikachu
+
+### Registro
+POST {{host}}/api/v1/auth/register
+Content-Type: application/json
+
+{ "username": "ash", "email": "ash@example.com", "password": "Pikachu123" }
+
+### Login (copia accessToken en @token)
+POST {{host}}/api/v1/auth/login
+Content-Type: application/json
+
+{ "username": "demo", "password": "Demo1234!" }
+
+### Quién soy
+GET {{host}}/api/v1/auth/me
+Authorization: Bearer {{token}}
+
+### Sincronizar un Pokémon (201 si es nuevo, 200 si ya existía)
+POST {{host}}/api/v1/pokemon/sync/25
+Authorization: Bearer {{token}}
+
+### Listado local con filtros (público)
+GET {{host}}/api/v1/pokemon?page=0&size=10&region=kanto&tag=starter
+
+### Editar campos propios con control de versión
+PUT {{host}}/api/v1/pokemon/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+If-Match: "0"
+
+{ "localName": "Semillita", "region": "Kanto", "tags": ["starter", "grass"] }
+
+### Editar parcialmente (PATCH): solo los campos enviados cambian
+PATCH {{host}}/api/v1/pokemon/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "region": "Johto" }
+
+### Borrar (solo ADMIN; con token de demo devuelve 403)
+DELETE {{host}}/api/v1/pokemon/1
+Authorization: Bearer {{token}}
+
+### Sincronización masiva (solo ADMIN)
+POST {{host}}/api/v1/pokemon/sync?from=1&to=20
+Authorization: Bearer {{token}}

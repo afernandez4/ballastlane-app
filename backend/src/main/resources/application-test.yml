@@ -1,0 +1,5 @@
+# Automated tests. Database connections are provided by Testcontainers
+# (@ServiceConnection), so no datasource is declared here.
+pokedex:
+  security:
+    jwt-secret: test-secret-only-for-automated-tests-minimum-32-bytes

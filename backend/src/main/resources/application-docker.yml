@@ -1,0 +1,13 @@
+# Docker Compose: values come from environment variables (see .env.example).
+# Missing variables make the application fail at startup on purpose.
+spring:
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed
+  datasource:
+    url: ${DB_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+pokedex:
+  security:
+    jwt-secret: ${JWT_SECRET}
