@@ -16,11 +16,11 @@ export default function App() {
         <Route index element={<Navigate to="/pokedex" replace />} />
         <Route path="/pokedex" element={<PokedexPage />} />
         <Route path="/pokedex/:idOrName" element={<PokemonDetailPage />} />
-        <Route path="/mis-pokemon" element={<MyPokemonPage />} />
+        <Route path="/my-pokemon" element={<MyPokemonPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/mis-pokemon/:id/editar" element={<EditPokemonPage />} />
+          <Route path="/my-pokemon/:id/edit" element={<EditPokemonPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>

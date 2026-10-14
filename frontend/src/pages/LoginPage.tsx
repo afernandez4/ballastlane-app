@@ -14,7 +14,7 @@ export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from ?? '/mis-pokemon';
+  const from = (location.state as { from?: string } | null)?.from ?? '/my-pokemon';
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -31,14 +31,14 @@ export function LoginPage() {
 
   const serverError =
     mutation.error instanceof ApiError && mutation.error.status === 401
-      ? 'Usuario o contraseña incorrectos.'
+      ? 'Wrong username or password.'
       : mutation.error
-        ? 'No se pudo iniciar sesión. Inténtalo de nuevo.'
+        ? 'Could not log in. Try again.'
         : null;
 
   return (
     <section className="mx-auto max-w-md space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Iniciar sesión</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Log in</h1>
 
       {serverError && <ErrorState message={serverError} />}
 
@@ -48,7 +48,7 @@ export function LoginPage() {
         className="space-y-4 rounded-xl bg-white p-6 shadow-sm"
       >
         <div>
-          <Label htmlFor="username">Usuario</Label>
+          <Label htmlFor="username">Username</Label>
           <input
             id="username"
             autoComplete="username"
@@ -60,7 +60,7 @@ export function LoginPage() {
           <FieldError id="username-error" message={form.formState.errors.username?.message} />
         </div>
         <div>
-          <Label htmlFor="password">Contraseña</Label>
+          <Label htmlFor="password">Password</Label>
           <input
             id="password"
             type="password"
@@ -77,14 +77,14 @@ export function LoginPage() {
           disabled={mutation.isPending}
           className="w-full rounded-md bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-700 disabled:opacity-60"
         >
-          {mutation.isPending ? 'Entrando…' : 'Entrar'}
+          {mutation.isPending ? 'Logging in…' : 'Log in'}
         </button>
       </form>
 
       <p className="text-sm text-slate-600">
-        ¿No tienes cuenta?{' '}
+        No account yet?{' '}
         <Link to="/register" className="font-medium text-slate-900 underline">
-          Regístrate
+          Sign up
         </Link>
       </p>
     </section>

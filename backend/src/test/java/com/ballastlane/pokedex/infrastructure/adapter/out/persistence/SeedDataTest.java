@@ -41,7 +41,7 @@ class SeedDataTest {
     LocalPokemon bulbasaur = repository.findByPokeApiId(1).orElseThrow();
     assertThat(bulbasaur.types()).extracting(t -> t.name()).containsExactly("grass", "poison");
     assertThat(bulbasaur.abilities()).isNotEmpty();
-    assertThat(bulbasaur.localName()).isEqualTo("Semillita");
+    assertThat(bulbasaur.localName()).isEqualTo("Little Seed");
     assertThat(bulbasaur.tags()).containsExactly("starter", "grass");
   }
 }

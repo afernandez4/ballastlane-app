@@ -12,7 +12,7 @@ export function StatBar({ name, value }: StatBarProps) {
       <span className="text-right font-mono tabular-nums text-slate-900">{value}</span>
       <div
         role="meter"
-        aria-label={`${name} ${value} de 255`}
+        aria-label={`${name} ${value} of 255`}
         aria-valuemin={0}
         aria-valuemax={255}
         aria-valuenow={value}

@@ -28,7 +28,7 @@ export function PokemonCard({
         {spriteUrl ? (
           <img src={spriteUrl} alt="" loading="lazy" className="h-full object-contain" />
         ) : (
-          <span className="text-sm text-slate-400">Sin imagen</span>
+          <span className="text-sm text-slate-400">No image</span>
         )}
       </div>
       <p className="mt-3 text-xs font-mono text-slate-500">#{String(id).padStart(3, '0')}</p>
@@ -36,11 +36,11 @@ export function PokemonCard({
       <p className="text-sm text-slate-600">{category || 'Pokémon'}</p>
       <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
         <div>
-          <dt className="text-slate-500">Peso</dt>
+          <dt className="text-slate-500">Weight</dt>
           <dd className="font-medium">{formatWeight(weight)}</dd>
         </div>
         <div>
-          <dt className="text-slate-500">Habilidades</dt>
+          <dt className="text-slate-500">Abilities</dt>
           <dd className="truncate font-medium">
             {abilities
               .map((a) => a.name)

@@ -25,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class GetPokemonDetailServiceTest {
 
-  private static final List<String> PREFERRED_LANGUAGES = List.of("es", "en");
+  private static final List<String> PREFERRED_LANGUAGES = List.of("en");
 
   @Mock private PokemonCatalogPort catalog;
 
@@ -84,11 +84,11 @@ class GetPokemonDetailServiceTest {
   }
 
   @Test
-  void asksCatalogForSpanishThenEnglishDescription() {
+  void asksCatalogForEnglishDescription() {
     when(catalog.findDetail(anyString(), anyList())).thenReturn(Optional.of(pikachu));
 
     service.get("pikachu");
 
-    verify(catalog).findDetail("pikachu", List.of("es", "en"));
+    verify(catalog).findDetail("pikachu", List.of("en"));
   }
 }

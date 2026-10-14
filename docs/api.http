@@ -1,55 +1,55 @@
-### Variables (cambia el host si usas Docker en otro puerto: 8080 local, 8082 en el compose de pruebas)
+### Variables (use 8080 for local runs, or the API_PORT you set for Docker)
 @host = http://localhost:8080
-@token = PEGA_AQUI_EL_TOKEN
+@token = PASTE_THE_TOKEN_HERE
 
-### Catálogo (público)
+### Catalogue (public)
 GET {{host}}/api/v1/pokeapi/pokemon?page=0&size=20
 
-### Detalle por id o nombre (público)
+### Detail by id or name (public)
 GET {{host}}/api/v1/pokeapi/pokemon/pikachu
 
-### Registro
+### Sign up
 POST {{host}}/api/v1/auth/register
 Content-Type: application/json
 
 { "username": "ash", "email": "ash@example.com", "password": "Pikachu123" }
 
-### Login (copia accessToken en @token)
+### Log in (copy accessToken into @token)
 POST {{host}}/api/v1/auth/login
 Content-Type: application/json
 
 { "username": "demo", "password": "Demo1234!" }
 
-### Quién soy
+### Current user
 GET {{host}}/api/v1/auth/me
 Authorization: Bearer {{token}}
 
-### Sincronizar un Pokémon (201 si es nuevo, 200 si ya existía)
+### Sync one Pokémon (201 if new, 200 if it already existed)
 POST {{host}}/api/v1/pokemon/sync/25
 Authorization: Bearer {{token}}
 
-### Listado local con filtros (público)
+### Local list with filters (public)
 GET {{host}}/api/v1/pokemon?page=0&size=10&region=kanto&tag=starter
 
-### Editar campos propios con control de versión
+### Edit own fields with version check
 PUT {{host}}/api/v1/pokemon/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 If-Match: "0"
 
-{ "localName": "Semillita", "region": "Kanto", "tags": ["starter", "grass"] }
+{ "localName": "Little Seed", "region": "Kanto", "tags": ["starter", "grass"] }
 
-### Editar parcialmente (PATCH): solo los campos enviados cambian
+### Partial edit (PATCH): only the fields you send change
 PATCH {{host}}/api/v1/pokemon/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 { "region": "Johto" }
 
-### Borrar (solo ADMIN; con token de demo devuelve 403)
+### Delete (ADMIN only; with the demo token it returns 403)
 DELETE {{host}}/api/v1/pokemon/1
 Authorization: Bearer {{token}}
 
-### Sincronización masiva (solo ADMIN)
+### Bulk sync (ADMIN only)
 POST {{host}}/api/v1/pokemon/sync?from=1&to=20
 Authorization: Bearer {{token}}

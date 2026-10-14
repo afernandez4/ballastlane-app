@@ -81,6 +81,6 @@ describe('api client', () => {
     const error = await api.get('/api/v1/pokeapi/pokemon').catch((e: unknown) => e);
 
     expect((error as ApiError).status).toBe(0);
-    expect((error as ApiError).message).toMatch(/conexión/i);
+    expect((error as ApiError).message).toMatch(/connection/i);
   });
 });

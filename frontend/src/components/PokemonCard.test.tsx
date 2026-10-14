@@ -53,6 +53,6 @@ describe('PokemonCard', () => {
       />,
     );
 
-    expect(screen.getByText('Sin imagen')).toBeInTheDocument();
+    expect(screen.getByText('No image')).toBeInTheDocument();
   });
 });

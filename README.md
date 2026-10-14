@@ -1,83 +1,82 @@
-# ballastlane-chalenge
+# ballastlane-challenge
 
-Pokédex: API en Spring Boot con arquitectura hexagonal y aplicación web en React. Consulta Pokémon desde PokeAPI, guarda una copia local en Postgres y permite editar tus propios datos.
+Pokédex: a Spring Boot API with hexagonal architecture and a React web app. It browses Pokémon from PokeAPI, stores a local copy in Postgres, and lets users edit their own data.
 
-> Repositorio: <https://github.com/afernandez4/ballastlane-chalenge>
+## Contents
 
-## Contenido
-
-- [Historias de usuario](#historias-de-usuario)
-- [Arquitectura](#arquitectura)
-- [Ejecución con Docker](#ejecución-con-docker)
-- [Ejecución en local](#ejecución-en-local)
+- [User stories](#user-stories)
+- [Architecture](#architecture)
+- [Run with Docker](#run-with-docker)
+- [Run locally](#run-locally)
 - [URLs](#urls)
-- [Credenciales demo](#credenciales-demo)
-- [Variables de entorno](#variables-de-entorno)
-- [Tests y cobertura](#tests-y-cobertura)
-- [Decisiones técnicas y trade-offs](#decisiones-técnicas-y-trade-offs)
-- [Estado del proyecto](#estado-del-proyecto)
+- [Demo credentials](#demo-credentials)
+- [Environment variables](#environment-variables)
+- [Tests and coverage](#tests-and-coverage)
+- [Technical decisions and trade-offs](#technical-decisions-and-trade-offs)
+- [Project status](#project-status)
 
-## Historias de usuario
+## User stories
 
-| Historia | Endpoint | Pantalla |
+| Story | Endpoint | Screen |
 | --- | --- | --- |
-| US01 Enumeración paginada (caché) | `GET /api/v1/pokeapi/pokemon?page&size` | Pokédex (`/pokedex`) |
-| US02 Vista detallada | `GET /api/v1/pokeapi/pokemon/{idOrName}` | Detalle (`/pokedex/:idOrName`) |
-| US03 Sincronización a BD relacional | `POST /api/v1/pokemon/sync/{idOrName}`; `POST /api/v1/pokemon/sync?from&to` (ADMIN) | Botón "Guardar en mi catálogo" en el detalle |
-| US04 Modificación local con 404/400/409 | `PUT` y `PATCH /api/v1/pokemon/{id}` (`If-Match`) | Mis Pokémon (`/mis-pokemon`) y edición (`/mis-pokemon/:id/editar`) |
-| CRUD local | `GET`, `POST`, `PUT`, `PATCH`, `DELETE /api/v1/pokemon` (DELETE solo ADMIN) | Mis Pokémon |
-| Usuarios y JWT | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me` | Login y registro |
+| US01 Paginated listing (cached) | `GET /api/v1/pokeapi/pokemon?page&size` | Pokédex (`/pokedex`) |
+| US02 Detail view | `GET /api/v1/pokeapi/pokemon/{idOrName}` | Detail (`/pokedex/:idOrName`) |
+| US03 Sync to the relational database | `POST /api/v1/pokemon/sync/{idOrName}`; `POST /api/v1/pokemon/sync?from&to` (ADMIN) | "Save to my catalogue" button on the detail page |
+| US04 Local edit with 404/400/409 | `PUT` and `PATCH /api/v1/pokemon/{id}` (`If-Match`) | My Pokémon (`/my-pokemon`) and edit (`/my-pokemon/:id/edit`) |
+| Local CRUD | `GET`, `POST`, `PUT`, `PATCH`, `DELETE /api/v1/pokemon` (DELETE is ADMIN only) | My Pokémon |
+| Users and JWT | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me` | Log in and sign up |
 
-Documentación interactiva de la API (Swagger UI): `http://localhost:8080/swagger-ui.html` cuando el backend está levantado.
+Interactive API docs (Swagger UI): `http://localhost:8080/swagger-ui.html` while the backend is running.
 
-## Arquitectura
+## Architecture
 
 ```
 backend/
-  domain/                       modelos y reglas (sin Spring)
+  domain/                       models and rules (no Spring)
   application/
-    port/in                     casos de uso (entrada)
-    port/out                    puertos hacia PokeAPI, BD, hash y tokens
-    usecase/                    servicios de aplicación
+    port/in                     use cases (inbound)
+    port/out                    ports to PokeAPI, database, hashing and tokens
+    usecase/                    application services
   infrastructure/
-    adapter/in/web              controladores REST, DTOs, ProblemDetail
-    adapter/out/pokeapi         cliente RestClient, DTOs y mapper de PokeAPI
-    adapter/out/persistence     JPA, Flyway, mapper entidad <-> dominio
-    security                    JWT, filtro, reglas de acceso, CORS
-    config                      cableado de casos de uso, caché y propiedades
+    adapter/in/web              REST controllers, DTOs, ProblemDetail
+    adapter/out/pokeapi         RestClient, PokeAPI DTOs and mapper
+    adapter/out/persistence     JPA, Flyway, entity <-> domain mapper
+    security                    JWT, filter, access rules, CORS
+    config                      use case wiring, cache and properties
 frontend/                       React 18 + Vite + TypeScript + Tailwind
-task-api/                       reservado para el ejercicio GenAI (pendiente)
-docs/                           notas de decisiones
+task-api/                       reserved for the GenAI exercise (pending)
+docs/                           HTTP examples
 ```
 
-Las reglas de dependencia se verifican con ArchUnit (`ArchitectureTest`): el dominio no depende de la aplicación ni de la infraestructura, el dominio y la aplicación no usan frameworks, y los controladores solo usan puertos de entrada.
+Dependency rules are checked with ArchUnit (`ArchitectureTest`): the domain does not depend on the application or infrastructure layers, the domain and application do not use frameworks, and controllers only use inbound ports.
 
-## Ejecución con Docker
+## Run with Docker
 
-Requisitos: Docker con Compose.
+Requirements: Docker with Compose.
 
 ```bash
 cp .env.example .env
-# edita JWT_SECRET en .env (al menos 32 bytes); sin él, compose no arranca
+# set JWT_SECRET in .env (at least 32 bytes); compose will not start without it
 docker compose up --build
 ```
 
-Servicios: `db` (Postgres 16), `api` (Spring Boot en perfil `docker`) y `web` (React servido por nginx, que reenvía `/api` al backend). Los puertos del host son configurables con `POSTGRES_PORT`, `API_PORT` y `WEB_PORT` en `.env`.
+Services: `db` (Postgres 16), `api` (Spring Boot with the `docker` profile) and `web` (React served by nginx, which forwards `/api` to the backend). Host ports can be changed with `POSTGRES_PORT`, `API_PORT` and `WEB_PORT` in `.env`.
 
-## Ejecución en local
+## Run locally
 
-Requisitos: Java 21, Maven (o `./mvnw`), Node 22, Docker (para la base de datos y los tests).
+Requirements: Java 21, Maven (or `./mvnw`), Node 22, Docker (for the database and tests).
 
-1. Base de datos:
+1. Database:
    ```bash
    docker compose up -d db
    ```
-2. Backend (perfil `local`, con los seeds de demo):
+   The local profile connects to port 5433. Start the database on that port with `POSTGRES_PORT=5433 docker compose up -d db`.
+2. Backend (`local` profile, with demo seed data):
    ```bash
    cd backend
    SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
    ```
-3. Frontend (Vite reenvía `/api` a `localhost:8080`):
+3. Frontend (Vite forwards `/api` to `localhost:8080`):
    ```bash
    cd frontend
    npm ci
@@ -86,66 +85,67 @@ Requisitos: Java 21, Maven (o `./mvnw`), Node 22, Docker (para la base de datos 
 
 ## URLs
 
-| Qué | Dónde |
+| What | Where |
 | --- | --- |
-| Aplicación (Docker) | <http://localhost:8081> |
-| Aplicación (desarrollo) | <http://localhost:5173> |
+| Application (Docker) | <http://localhost:8081> |
+| Application (development) | <http://localhost:5173> |
 | API | <http://localhost:8080/api/v1> |
 | Swagger UI | <http://localhost:8080/swagger-ui.html> |
 | Health | <http://localhost:8080/actuator/health> |
 
-Peticiones de ejemplo para cualquier cliente HTTP: [`docs/api.http`](docs/api.http).
+Example requests for any HTTP client: [`docs/api.http`](docs/api.http).
 
-## Credenciales demo
+## Demo credentials
 
-Solo existen en los perfiles `local` y `docker` (datos de seed).
+They only exist in the `local` and `docker` profiles (seed data).
 
-| Usuario | Contraseña | Rol |
+| Username | Password | Role |
 | --- | --- | --- |
-| `admin` | `Admin123!` | ADMIN (puede borrar y sincronizar en masa) |
+| `admin` | `Admin123!` | ADMIN (can delete and sync in bulk) |
 | `demo` | `Demo1234!` | USER |
 
-El seed también carga Pokémon #1 a #20 con datos de PokeAPI y algunos campos propios.
+The seed also loads Pokémon #1 to #20 with PokeAPI data and some own fields.
 
-## Variables de entorno
+## Environment variables
 
-| Variable | Por defecto | Uso |
+| Variable | Default | Purpose |
 | --- | --- | --- |
-| `JWT_SECRET` | — (obligatoria en `docker`) | Firma de tokens; mínimo 32 bytes |
-| `JWT_EXPIRATION_MINUTES` | `60` | Caducidad del token |
-| `POKEAPI_BASE_URL` | `https://pokeapi.co/api/v2` | Origen de los datos |
-| `CORS_ALLOWED_ORIGINS` | `http://localhost:5173` | Orígenes permitidos (lista separada por comas) |
-| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | `pokedex` | Base de datos |
-| `DB_URL` | `jdbc:postgresql://db:5432/pokedex` | Solo perfil `docker` |
-| `VITE_API_URL` | vacío | URL del backend para el build del frontend (vacío = mismo origen) |
+| `JWT_SECRET` | — (required in `docker`) | Token signing key; at least 32 bytes |
+| `JWT_EXPIRATION_MINUTES` | `60` | Token lifetime |
+| `POKEAPI_BASE_URL` | `https://pokeapi.co/api/v2` | Data source |
+| `CORS_ALLOWED_ORIGINS` | `http://localhost:5173` | Allowed origins (comma-separated) |
+| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | `pokedex` | Database |
+| `DB_URL` | `jdbc:postgresql://db:5432/pokedex` | `docker` profile only |
+| `VITE_API_URL` | empty | Backend URL for the frontend build (empty = same origin) |
 
-## Tests y cobertura
+## Tests and coverage
 
 ```bash
-cd backend && ./mvnw verify     # tests, Testcontainers, ArchUnit, Spotless y JaCoCo
+cd backend && ./mvnw verify     # tests, Testcontainers, ArchUnit, Spotless and JaCoCo
 cd frontend && npm test         # Vitest + Testing Library + MSW
 ```
 
-- Backend: tests unitarios de dominio y casos de uso (Mockito), adaptador de PokeAPI con WireMock y fixtures reales, controladores con `@WebMvcTest`, persistencia contra Postgres 16 con Testcontainers, y un test de extremo a extremo (`EndToEndFlowTest`) con el flujo registro → login → sincronización → edición → borrado.
-- JaCoCo exige 80 % de líneas en el conjunto y 85 % en `domain` + `application`.
-- Frontend: cliente HTTP y manejo de 401, decodificación del token, rutas protegidas, paginación, tarjeta, formulario de edición (validación y errores 400/409) y login.
-- Los tests con Testcontainers necesitan Docker en ejecución.
+- Backend: unit tests for domain and use cases (Mockito), the PokeAPI adapter with WireMock and real fixtures, controllers with `@WebMvcTest`, persistence against Postgres 16 with Testcontainers, and an end-to-end test (`EndToEndFlowTest`) covering register → log in → sync → edit → delete.
+- JaCoCo requires 80% line coverage overall and 85% for `domain` + `application`.
+- Frontend: HTTP client and 401 handling, token decoding, protected routes, pagination, card, edit form (validation and 400/409 errors), and login.
+- Testcontainers tests need Docker running.
 
-## Decisiones técnicas y trade-offs
+## Technical decisions and trade-offs
 
-- **Hexagonal sin frameworks en el núcleo.** Los casos de uso son clases Java planas; Spring solo cablea. Coste: más ficheros y mapeos. Beneficio: el dominio se prueba sin contexto.
-- **Dos modelos de persistencia.** La entidad JPA es distinta del modelo de dominio; el mapper es código a mano porque la composición de datos (detalle + especie + cadena) no encaja en MapStruct sin mucha configuración.
-- **Caché en infraestructura.** Caffeine en el adaptador y el cliente de PokeAPI, con TTL y tamaño configurables. Trade-off: cada instancia tiene su propia caché.
-- **Sincronización como upsert.** Sincronizar nunca pisa campos propios (`localName`, `region`, `tags`); solo se refrescan los datos base.
-- **Concurrencia optimista.** `@Version` en BD, `ETag` en las respuestas y `If-Match` en PUT. Un token desfasado devuelve 409.
-- **Seguridad sin estado.** JWT HS256 firmado con secreto de 32 bytes o más; el arranque falla si falta en `docker`. El frontend guarda el token en memoria y en `sessionStorage`, y solo lo lee para mostrar el usuario y ocultar botones de admin: la autorización real está en el backend.
-- **Errores RFC 7807.** Todas las respuestas de error son `ProblemDetail`; los 500 no exponen detalles y llevan `correlationId`.
-- **Seeds fuera de los tests.** Los datos de demo están en `db/seed` y solo se cargan en `local` y `docker`, así los tests de persistencia trabajan sobre esquema limpio.
-- **Frontend en React 18** (según el plan) con TanStack Query para caché de servidor; los formularios usan React Hook Form con Zod, con las mismas reglas que el backend.
+- **Hexagonal architecture with a framework-free core.** Use cases are plain Java classes; Spring only wires them. Cost: more files and mappings. Benefit: the domain is tested without a context.
+- **Two persistence models.** The JPA entity is separate from the domain model. The mapper is hand-written because combining detail, species and evolution chain does not fit MapStruct without heavy configuration.
+- **Caching in the infrastructure layer.** Caffeine in the PokeAPI adapter and client, with configurable TTL and size. Trade-off: each instance has its own cache.
+- **Sync as an upsert.** Syncing never overwrites own fields (`localName`, `region`, `tags`); only base data is refreshed.
+- **Optimistic concurrency.** `@Version` in the database, `ETag` on responses and `If-Match` on PUT. A stale token returns 409.
+- **Stateless security.** HS256 JWTs signed with a secret of at least 32 bytes; startup fails if it is missing in `docker`. The frontend keeps the token in memory and `sessionStorage`, and reads it only to show the user name and hide admin buttons. Real authorization is enforced by the backend.
+- **RFC 7807 errors.** Every error response is a `ProblemDetail`; 500 responses do not expose details and include a `correlationId`.
+- **Seed data outside tests.** Demo data lives in `db/seed` and only loads in `local` and `docker`, so persistence tests run on a clean schema.
+- **English only.** Code, UI, documentation and seed data are in English. PokeAPI descriptions are requested in English.
+- **React 18** with TanStack Query for server state; forms use React Hook Form with Zod, with the same rules as the backend.
 
-## Estado del proyecto
+## Project status
 
-- Hecho: backend (Fases 0 a 4), frontend (Fase 5), Docker y documentación básica.
-- Pendiente: ejercicio GenAI de `task-api/` (T6.1). Requiere el proceso de trabajo real del autor y la sección "Cómo usé IA" debe reflejarlo; no está generada.
-- Pendiente: presentación y preguntas del panel (Fase 7) y ADRs.
-- Pendiente de verificar en CI: el job de frontend y el de backend con Docker disponible.
+- Done: backend (phases 0 to 4), frontend (phase 5), Docker and documentation.
+- Pending: the GenAI exercise in `task-api/` (T6.1). It depends on the author's own process, and the "How I used AI" section must reflect it; it is not generated.
+- Pending: presentation material and expert Q&A (phase 7), and ADRs.
+- Pending CI verification: frontend and backend jobs on GitHub with Docker available.

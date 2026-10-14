@@ -58,9 +58,9 @@ export function EditPokemonPage() {
         query.data?.etag,
       ),
     onSuccess: () => {
-      toast.show('Cambios guardados');
+      toast.show('Changes saved');
       void queryClient.invalidateQueries({ queryKey: ['local'] });
-      navigate('/mis-pokemon');
+      navigate('/my-pokemon');
     },
     onError: (error) => {
       if (!(error instanceof ApiError)) return;
@@ -80,15 +80,15 @@ export function EditPokemonPage() {
   });
 
   if (query.isPending) {
-    return <Spinner label="Cargando Pokémon" />;
+    return <Spinner label="Loading Pokémon" />;
   }
 
   if (query.isError) {
     if (query.error instanceof ApiError && query.error.status === 404) {
       return (
-        <EmptyState title="Este Pokémon ya no existe">
-          <Link to="/mis-pokemon" className="font-medium text-slate-900 underline">
-            Volver a mis Pokémon
+        <EmptyState title="This Pokémon no longer exists">
+          <Link to="/my-pokemon" className="font-medium text-slate-900 underline">
+            Back to my Pokémon
           </Link>
         </EmptyState>
       );
@@ -104,26 +104,26 @@ export function EditPokemonPage() {
   const pokemon = query.data.data;
   const submitError =
     save.error instanceof ApiError && ![400, 409, 404].includes(save.error.status)
-      ? 'No se pudieron guardar los cambios. Inténtalo de nuevo.'
+      ? 'Could not save the changes. Try again.'
       : null;
 
   return (
     <section aria-labelledby="edit-title" className="mx-auto max-w-xl space-y-6">
-      <Link to="/mis-pokemon" className="text-sm font-medium text-slate-700 underline">
-        ← Volver a mis Pokémon
+      <Link to="/my-pokemon" className="text-sm font-medium text-slate-700 underline">
+        ← Back to my Pokémon
       </Link>
       <header>
         <h1 id="edit-title" className="text-2xl font-bold tracking-tight">
-          Editar {capitalize(pokemon.name)}
+          Edit {capitalize(pokemon.name)}
         </h1>
         <p className="text-sm text-slate-600">
-          Los datos base vienen de PokeAPI. Solo puedes cambiar los campos propios.
+          Base data comes from PokeAPI. You can only change your own fields.
         </p>
       </header>
 
       {conflict && (
         <ErrorState
-          message="Otra persona modificó este Pokémon mientras editabas. Recarga los datos y vuelve a aplicar tus cambios."
+          message="Someone else changed this Pokémon while you were editing. Reload the data and apply your changes again."
           onRetry={() => {
             setConflict(false);
             void query.refetch();
@@ -138,7 +138,7 @@ export function EditPokemonPage() {
         className="space-y-4 rounded-xl bg-white p-6 shadow-sm"
       >
         <div>
-          <Label htmlFor="localName">Nombre local</Label>
+          <Label htmlFor="localName">Local name</Label>
           <input
             id="localName"
             className={fieldClass(!!form.formState.errors.localName)}
@@ -149,7 +149,7 @@ export function EditPokemonPage() {
           <FieldError id="localName-error" message={form.formState.errors.localName?.message} />
         </div>
         <div>
-          <Label htmlFor="region">Región</Label>
+          <Label htmlFor="region">Region</Label>
           <input
             id="region"
             className={fieldClass(!!form.formState.errors.region)}
@@ -160,7 +160,7 @@ export function EditPokemonPage() {
           <FieldError id="region-error" message={form.formState.errors.region?.message} />
         </div>
         <div>
-          <Label htmlFor="tagsText">Etiquetas</Label>
+          <Label htmlFor="tagsText">Tags</Label>
           <input
             id="tagsText"
             className={fieldClass(!!form.formState.errors.tagsText)}
@@ -169,24 +169,24 @@ export function EditPokemonPage() {
             {...form.register('tagsText')}
           />
           <p id="tags-help" className="text-xs text-slate-500">
-            Separadas por comas. Máximo 10, sin repetir, de hasta 30 caracteres.
+            Comma-separated. Up to 10, no repeats, max 30 characters each.
           </p>
           <FieldError id="tagsText-error" message={form.formState.errors.tagsText?.message} />
         </div>
 
         <div className="flex justify-end gap-3 pt-2">
           <Link
-            to="/mis-pokemon"
+            to="/my-pokemon"
             className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium hover:bg-slate-100"
           >
-            Cancelar
+            Cancel
           </Link>
           <button
             type="submit"
             disabled={save.isPending || conflict}
             className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60"
           >
-            {save.isPending ? 'Guardando…' : 'Guardar'}
+            {save.isPending ? 'Saving…' : 'Save'}
           </button>
         </div>
       </form>

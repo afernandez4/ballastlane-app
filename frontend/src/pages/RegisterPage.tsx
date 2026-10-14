@@ -24,7 +24,7 @@ export function RegisterPage() {
   const mutation = useMutation({
     mutationFn: (values: RegisterForm) => registerRequest(values),
     onSuccess: () => {
-      toast.show('Cuenta creada. Ya puedes iniciar sesión.');
+      toast.show('Account created. You can now log in.');
       navigate('/login', { replace: true });
     },
     onError: (error) => {
@@ -39,14 +39,14 @@ export function RegisterPage() {
 
   const serverMessage =
     mutation.error instanceof ApiError && mutation.error.status === 409
-      ? 'Ese usuario o correo ya está registrado.'
+      ? 'That username or email is already registered.'
       : mutation.error && !(mutation.error instanceof ApiError && mutation.error.status === 400)
-        ? 'No se pudo crear la cuenta. Inténtalo de nuevo.'
+        ? 'Could not create the account. Try again.'
         : null;
 
   return (
     <section className="mx-auto max-w-md space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Crear cuenta</h1>
+      <h1 className="text-2xl font-bold tracking-tight">Create account</h1>
 
       {serverMessage && <ErrorState message={serverMessage} />}
 
@@ -56,7 +56,7 @@ export function RegisterPage() {
         className="space-y-4 rounded-xl bg-white p-6 shadow-sm"
       >
         <div>
-          <Label htmlFor="username">Usuario</Label>
+          <Label htmlFor="username">Username</Label>
           <input
             id="username"
             autoComplete="username"
@@ -66,12 +66,12 @@ export function RegisterPage() {
             {...form.register('username')}
           />
           <p id="username-help" className="text-xs text-slate-500">
-            Letras, números o guion bajo. Entre 3 y 50 caracteres.
+            Letters, digits or underscores. 3 to 50 characters.
           </p>
           <FieldError id="username-error" message={form.formState.errors.username?.message} />
         </div>
         <div>
-          <Label htmlFor="email">Correo</Label>
+          <Label htmlFor="email">Email</Label>
           <input
             id="email"
             type="email"
@@ -84,7 +84,7 @@ export function RegisterPage() {
           <FieldError id="email-error" message={form.formState.errors.email?.message} />
         </div>
         <div>
-          <Label htmlFor="password">Contraseña</Label>
+          <Label htmlFor="password">Password</Label>
           <input
             id="password"
             type="password"
@@ -95,7 +95,7 @@ export function RegisterPage() {
             {...form.register('password')}
           />
           <p id="password-help" className="text-xs text-slate-500">
-            Mínimo 8 caracteres, con al menos una letra y un número.
+            At least 8 characters, with at least one letter and one digit.
           </p>
           <FieldError id="password-error" message={form.formState.errors.password?.message} />
         </div>
@@ -104,14 +104,14 @@ export function RegisterPage() {
           disabled={mutation.isPending}
           className="w-full rounded-md bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-700 disabled:opacity-60"
         >
-          {mutation.isPending ? 'Creando…' : 'Crear cuenta'}
+          {mutation.isPending ? 'Creating…' : 'Create account'}
         </button>
       </form>
 
       <p className="text-sm text-slate-600">
-        ¿Ya tienes cuenta?{' '}
+        Already have an account?{' '}
         <Link to="/login" className="font-medium text-slate-900 underline">
-          Inicia sesión
+          Log in
         </Link>
       </p>
     </section>

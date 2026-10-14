@@ -32,7 +32,7 @@ export function PokedexPage() {
         <h1 id="pokedex-title" className="text-2xl font-bold tracking-tight">
           Pokédex
         </h1>
-        <p className="text-sm text-slate-600">Datos de PokeAPI, con paginación.</p>
+        <p className="text-sm text-slate-600">Data from PokeAPI, paginated.</p>
       </header>
 
       {query.isPending && <CardSkeleton count={PAGE_SIZE > 8 ? 8 : PAGE_SIZE} />}
@@ -45,10 +45,7 @@ export function PokedexPage() {
       )}
 
       {query.isSuccess && query.data.content.length === 0 && (
-        <EmptyState
-          title="No hay Pokémon en esta página"
-          description="Prueba con una página anterior."
-        />
+        <EmptyState title="No Pokémon on this page" description="Try a previous page." />
       )}
 
       {query.isSuccess && query.data.content.length > 0 && (

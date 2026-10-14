@@ -4,8 +4,8 @@ import { z } from 'zod';
 // request is sent. The server stays the authority: its field errors are shown on the form too.
 
 export const loginSchema = z.object({
-  username: z.string().trim().min(1, 'Introduce tu usuario'),
-  password: z.string().min(1, 'Introduce tu contraseña'),
+  username: z.string().trim().min(1, 'Enter your username'),
+  password: z.string().min(1, 'Enter your password'),
 });
 export type LoginForm = z.infer<typeof loginSchema>;
 
@@ -13,14 +13,14 @@ export const registerSchema = z.object({
   username: z
     .string()
     .trim()
-    .regex(/^[A-Za-z0-9_]{3,50}$/, 'Entre 3 y 50 caracteres: letras, números o guion bajo'),
-  email: z.string().trim().email('Introduce un correo válido'),
+    .regex(/^[A-Za-z0-9_]{3,50}$/, '3 to 50 characters: letters, digits or underscores'),
+  email: z.string().trim().email('Enter a valid email address'),
   password: z
     .string()
-    .min(8, 'Mínimo 8 caracteres')
-    .max(72, 'Máximo 72 caracteres')
-    .regex(/[A-Za-z]/, 'Debe incluir al menos una letra')
-    .regex(/\d/, 'Debe incluir al menos un número'),
+    .min(8, 'At least 8 characters')
+    .max(72, 'At most 72 characters')
+    .regex(/[A-Za-z]/, 'Must include at least one letter')
+    .regex(/\d/, 'Must include at least one digit'),
 });
 export type RegisterForm = z.infer<typeof registerSchema>;
 
@@ -37,25 +37,25 @@ export const localPokemonSchema = z
     localName: z
       .string()
       .trim()
-      .min(1, 'El nombre local es obligatorio')
-      .max(100, 'Máximo 100 caracteres'),
-    region: z.string().trim().max(100, 'Máximo 100 caracteres'),
+      .min(1, 'Local name is required')
+      .max(100, 'At most 100 characters'),
+    region: z.string().trim().max(100, 'At most 100 characters'),
     tagsText: z.string(),
   })
   .superRefine((value, ctx) => {
     const tags = parseTags(value.tagsText);
     if (tags.length > 10) {
-      ctx.addIssue({ code: 'custom', path: ['tagsText'], message: 'Máximo 10 etiquetas' });
+      ctx.addIssue({ code: 'custom', path: ['tagsText'], message: 'At most 10 tags' });
     }
     if (tags.some((tag) => tag.length > 30)) {
       ctx.addIssue({
         code: 'custom',
         path: ['tagsText'],
-        message: 'Cada etiqueta tiene como máximo 30 caracteres',
+        message: 'Each tag can have at most 30 characters',
       });
     }
     if (new Set(tags).size !== tags.length) {
-      ctx.addIssue({ code: 'custom', path: ['tagsText'], message: 'No repitas etiquetas' });
+      ctx.addIssue({ code: 'custom', path: ['tagsText'], message: 'Do not repeat tags' });
     }
   });
 export type LocalPokemonForm = z.infer<typeof localPokemonSchema>;

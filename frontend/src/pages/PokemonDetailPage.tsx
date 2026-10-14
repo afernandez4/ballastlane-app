@@ -31,11 +31,11 @@ export function PokemonDetailPage() {
   const sync = useMutation({
     mutationFn: () => syncPokemon(idOrName),
     onSuccess: ({ created }) => {
-      toast.show(created ? 'Pokémon guardado en tu catálogo' : 'Datos actualizados');
+      toast.show(created ? 'Pokémon saved to your catalogue' : 'Data updated');
       void queryClient.invalidateQueries({ queryKey: ['local'] });
     },
     onError: (error) => {
-      toast.show(error instanceof ApiError ? error.message : 'No se pudo sincronizar', 'error');
+      toast.show(error instanceof ApiError ? error.message : 'Could not sync', 'error');
     },
   });
 
@@ -48,15 +48,15 @@ export function PokemonDetailPage() {
   };
 
   if (detail.isPending) {
-    return <Spinner label="Cargando Pokémon" />;
+    return <Spinner label="Loading Pokémon" />;
   }
 
   if (detail.isError) {
     if (detail.error instanceof ApiError && detail.error.status === 404) {
       return (
-        <EmptyState title="Este Pokémon no existe" description="Revisa el nombre o el número.">
+        <EmptyState title="This Pokémon does not exist" description="Check the name or number.">
           <Link to="/pokedex" className="font-medium text-slate-900 underline">
-            Volver al catálogo
+            Back to the catalogue
           </Link>
         </EmptyState>
       );
@@ -73,7 +73,7 @@ export function PokemonDetailPage() {
   return (
     <article aria-labelledby="detail-title" className="space-y-8">
       <Link to="/pokedex" className="text-sm font-medium text-slate-700 underline">
-        ← Volver al catálogo
+        ← Back to the catalogue
       </Link>
 
       <header className="flex flex-col gap-6 md:flex-row md:items-center">
@@ -81,11 +81,11 @@ export function PokemonDetailPage() {
           {pokemon.imageUrl ? (
             <img
               src={pokemon.imageUrl}
-              alt={`Imagen de ${capitalize(pokemon.name)}`}
+              alt={`Image of ${capitalize(pokemon.name)}`}
               className="h-full object-contain p-4"
             />
           ) : (
-            <span className="text-slate-400">Sin imagen</span>
+            <span className="text-slate-400">No image</span>
           )}
         </div>
         <div className="flex-1 space-y-3">
@@ -100,11 +100,11 @@ export function PokemonDetailPage() {
           </div>
           <dl className="grid grid-cols-2 gap-4 text-sm sm:max-w-sm">
             <div>
-              <dt className="text-slate-500">Altura</dt>
+              <dt className="text-slate-500">Height</dt>
               <dd className="font-medium">{formatHeight(pokemon.height)}</dd>
             </div>
             <div>
-              <dt className="text-slate-500">Peso</dt>
+              <dt className="text-slate-500">Weight</dt>
               <dd className="font-medium">{formatWeight(pokemon.weight)}</dd>
             </div>
           </dl>
@@ -115,12 +115,10 @@ export function PokemonDetailPage() {
               disabled={sync.isPending}
               className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
             >
-              {sync.isPending ? 'Sincronizando…' : 'Guardar en mi catálogo'}
+              {sync.isPending ? 'Syncing…' : 'Save to my catalogue'}
             </button>
             {!isAuthenticated && (
-              <p className="mt-2 text-xs text-slate-500">
-                Necesitas iniciar sesión para guardarlo.
-              </p>
+              <p className="mt-2 text-xs text-slate-500">You need to log in to save it.</p>
             )}
           </div>
         </div>
@@ -129,7 +127,7 @@ export function PokemonDetailPage() {
       {pokemon.description && (
         <section aria-labelledby="description-title" className="space-y-2">
           <h2 id="description-title" className="text-lg font-semibold">
-            Descripción
+            Description
           </h2>
           <p className="max-w-prose text-slate-700">{pokemon.description}</p>
         </section>
@@ -137,7 +135,7 @@ export function PokemonDetailPage() {
 
       <section aria-labelledby="stats-title" className="space-y-3">
         <h2 id="stats-title" className="text-lg font-semibold">
-          Estadísticas base
+          Base stats
         </h2>
         <div className="max-w-xl space-y-2 rounded-xl bg-white p-4 shadow-sm">
           {pokemon.stats.map((stat) => (
@@ -149,7 +147,7 @@ export function PokemonDetailPage() {
       {pokemon.evolutionChain.length > 0 && (
         <section aria-labelledby="evolution-title" className="space-y-3">
           <h2 id="evolution-title" className="text-lg font-semibold">
-            Cadena evolutiva
+            Evolution chain
           </h2>
           <ol className="flex flex-wrap items-center gap-2">
             {pokemon.evolutionChain.map((stage, index) => (

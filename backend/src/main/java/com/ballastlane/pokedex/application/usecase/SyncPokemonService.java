@@ -20,7 +20,7 @@ import java.util.Optional;
 public class SyncPokemonService implements SyncPokemonUseCase {
 
   static final int MAX_RANGE = 151;
-  private static final List<String> PREFERRED_LANGUAGES = List.of("es", "en");
+  private static final List<String> PREFERRED_LANGUAGES = List.of("en");
 
   private final PokemonCatalogPort catalog;
   private final PokemonRepositoryPort repository;

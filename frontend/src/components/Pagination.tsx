@@ -11,17 +11,17 @@ const buttonClass =
 export function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
   const lastPage = Math.max(totalPages - 1, 0);
   return (
-    <nav aria-label="Paginación" className="flex items-center justify-between gap-4 py-4">
+    <nav aria-label="Pagination" className="flex items-center justify-between gap-4 py-4">
       <button
         type="button"
         className={buttonClass}
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 0}
       >
-        Anterior
+        Previous
       </button>
       <span className="text-sm text-slate-600" aria-live="polite">
-        Página {totalPages === 0 ? 0 : page + 1} de {totalPages}
+        Page {totalPages === 0 ? 0 : page + 1} of {totalPages}
       </span>
       <button
         type="button"
@@ -29,7 +29,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
         onClick={() => onPageChange(page + 1)}
         disabled={page >= lastPage}
       >
-        Siguiente
+        Next
       </button>
     </nav>
   );

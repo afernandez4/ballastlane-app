@@ -10,7 +10,7 @@ import java.util.Locale;
 /** US02: looks a Pokémon up by id or name and asks for the description in Spanish, then English. */
 public class GetPokemonDetailService implements GetPokemonDetailUseCase {
 
-  private static final List<String> PREFERRED_LANGUAGES = List.of("es", "en");
+  private static final List<String> PREFERRED_LANGUAGES = List.of("en");
 
   private final PokemonCatalogPort catalog;
 

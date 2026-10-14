@@ -33,7 +33,7 @@ public class LocalPokemonService
         PatchLocalPokemonUseCase,
         DeleteLocalPokemonUseCase {
 
-  private static final List<String> PREFERRED_LANGUAGES = List.of("es", "en");
+  private static final List<String> PREFERRED_LANGUAGES = List.of("en");
 
   private final PokemonRepositoryPort repository;
   private final PokemonCatalogPort catalog;

@@ -14,9 +14,9 @@ function tokenFor(role: 'USER' | 'ADMIN', exp = 4102444800): string {
 function renderAt(route: string) {
   return renderWithProviders(
     <Routes>
-      <Route path="/login" element={<p>Pantalla de login</p>} />
+      <Route path="/login" element={<p>Login screen</p>} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/mis-pokemon" element={<p>Mis Pokémon</p>} />
+        <Route path="/my-pokemon" element={<p>My Pokémon</p>} />
       </Route>
     </Routes>,
     { route },
@@ -25,25 +25,25 @@ function renderAt(route: string) {
 
 describe('ProtectedRoute', () => {
   it('redirects anonymous users to the login page', () => {
-    renderAt('/mis-pokemon');
+    renderAt('/my-pokemon');
 
-    expect(screen.getByText('Pantalla de login')).toBeInTheDocument();
-    expect(screen.queryByText('Mis Pokémon')).not.toBeInTheDocument();
+    expect(screen.getByText('Login screen')).toBeInTheDocument();
+    expect(screen.queryByText('My Pokémon')).not.toBeInTheDocument();
   });
 
   it('renders the protected page when a valid session is stored', () => {
     sessionStorage.setItem(SESSION_KEY, tokenFor('USER'));
 
-    renderAt('/mis-pokemon');
+    renderAt('/my-pokemon');
 
-    expect(screen.getByText('Mis Pokémon')).toBeInTheDocument();
+    expect(screen.getByText('My Pokémon')).toBeInTheDocument();
   });
 
   it('ignores an expired session', () => {
     sessionStorage.setItem(SESSION_KEY, tokenFor('USER', 1));
 
-    renderAt('/mis-pokemon');
+    renderAt('/my-pokemon');
 
-    expect(screen.getByText('Pantalla de login')).toBeInTheDocument();
+    expect(screen.getByText('Login screen')).toBeInTheDocument();
   });
 });

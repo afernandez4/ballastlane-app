@@ -113,7 +113,7 @@ class EndToEndFlowTest {
                 json(
                     Map.of(
                         "localName",
-                        "Semillita",
+                        "Little Seed",
                         "region",
                         "Kanto",
                         "tags",
@@ -131,7 +131,7 @@ class EndToEndFlowTest {
                 json(
                     Map.of(
                         "localName",
-                        "Semillita",
+                        "Little Seed",
                         "region",
                         "Kanto",
                         "tags",
@@ -144,7 +144,7 @@ class EndToEndFlowTest {
     ResponseEntity<Map> read = rest.getForEntity("/api/v1/pokemon/" + id, Map.class);
     assertThat(read.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(read.getBody())
-        .containsEntry("localName", "Semillita")
+        .containsEntry("localName", "Little Seed")
         .containsEntry("name", "bulbasaur")
         .containsEntry("pokeApiId", 1);
 

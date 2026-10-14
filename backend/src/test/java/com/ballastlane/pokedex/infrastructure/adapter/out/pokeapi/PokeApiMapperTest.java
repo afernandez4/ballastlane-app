@@ -16,10 +16,9 @@ class PokeApiMapperTest {
 
   @Test
   void descriptionUsesFirstPreferredLanguageAvailable() {
-    SpeciesResponse species =
-        species(flavor("en", "English text"), flavor("es", "Texto en español"));
+    SpeciesResponse species = species(flavor("en", "English text"), flavor("es", "Spanish text"));
 
-    assertThat(PokeApiMapper.description(species, LANGUAGES)).isEqualTo("Texto en español");
+    assertThat(PokeApiMapper.description(species, LANGUAGES)).isEqualTo("Spanish text");
   }
 
   @Test

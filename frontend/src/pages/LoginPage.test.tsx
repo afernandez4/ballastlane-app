@@ -15,10 +15,10 @@ describe('LoginPage', () => {
       { route: '/login' },
     );
 
-    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Log in' }));
 
-    expect(await screen.findByText('Introduce tu usuario')).toBeInTheDocument();
-    expect(screen.getByText('Introduce tu contraseña')).toBeInTheDocument();
+    expect(await screen.findByText('Enter your username')).toBeInTheDocument();
+    expect(screen.getByText('Enter your password')).toBeInTheDocument();
   });
 
   it('shows one generic message for wrong credentials', async () => {
@@ -34,10 +34,10 @@ describe('LoginPage', () => {
       { route: '/login' },
     );
 
-    await userEvent.type(screen.getByLabelText('Usuario'), 'ash');
-    await userEvent.type(screen.getByLabelText('Contraseña'), 'wrong-pass');
-    await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
+    await userEvent.type(screen.getByLabelText('Username'), 'ash');
+    await userEvent.type(screen.getByLabelText('Password'), 'wrong-pass');
+    await userEvent.click(screen.getByRole('button', { name: 'Log in' }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Usuario o contraseña incorrectos.');
+    expect(await screen.findByRole('alert')).toHaveTextContent('Wrong username or password.');
   });
 });

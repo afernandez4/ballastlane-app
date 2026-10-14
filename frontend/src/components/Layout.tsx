@@ -23,8 +23,8 @@ export function Layout() {
       <NavLink to="/pokedex" className={linkClass} onClick={() => setMenuOpen(false)}>
         Pokédex
       </NavLink>
-      <NavLink to="/mis-pokemon" className={linkClass} onClick={() => setMenuOpen(false)}>
-        Mis Pokémon
+      <NavLink to="/my-pokemon" className={linkClass} onClick={() => setMenuOpen(false)}>
+        My Pokémon
       </NavLink>
     </>
   );
@@ -39,7 +39,7 @@ export function Layout() {
         onClick={handleLogout}
         className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium hover:bg-slate-100"
       >
-        Salir
+        Log out
       </button>
     </div>
   ) : (
@@ -48,7 +48,7 @@ export function Layout() {
         Entrar
       </NavLink>
       <NavLink to="/register" className={linkClass}>
-        Registrarse
+        Sign up
       </NavLink>
     </div>
   );
@@ -61,7 +61,7 @@ export function Layout() {
             Pokédex
           </Link>
 
-          <nav aria-label="Principal" className="hidden items-center gap-1 md:flex">
+          <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
             {links}
           </nav>
           <div className="hidden md:block">{account}</div>
@@ -70,8 +70,8 @@ export function Layout() {
             type="button"
             className="rounded-md p-2 text-slate-700 hover:bg-slate-100 md:hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700"
             aria-expanded={menuOpen}
-            aria-controls="menu-movil"
-            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMenuOpen((open) => !open)}
           >
             <span aria-hidden="true" className="block text-xl leading-none">
@@ -82,8 +82,8 @@ export function Layout() {
 
         {menuOpen && (
           <nav
-            id="menu-movil"
-            aria-label="Móvil"
+            id="mobile-menu"
+            aria-label="Mobile"
             className="border-t border-slate-200 px-4 py-3 md:hidden"
           >
             <div className="flex flex-col gap-1">{links}</div>

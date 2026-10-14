@@ -57,8 +57,8 @@ api.interceptors.response.use(
 function toApiError(error: AxiosError<ProblemDetail>): ApiError {
   if (!error.response) {
     return new ApiError(0, {
-      title: 'Sin conexión',
-      detail: 'No se pudo conectar con el servidor. Revisa tu conexión.',
+      title: 'No connection',
+      detail: 'Could not reach the server. Check your connection.',
     });
   }
   return new ApiError(error.response.status, error.response.data ?? {});

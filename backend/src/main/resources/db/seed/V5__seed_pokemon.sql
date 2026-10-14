@@ -1,7 +1,7 @@
 -- Demo catalogue: Pokémon #1 to #20 with base data captured from PokeAPI.
 -- Own fields (local_name, region, tags) are set for a few of them to show editing.
 
-INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (1, 'bulbasaur', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png', 'Seed Pokémon', 7, 69, 'Semillita', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
+INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (1, 'bulbasaur', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png', 'Seed Pokémon', 7, 69, 'Little Seed', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
 INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 1), 0, 'grass', 1);
 INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 1), 1, 'poison', 2);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 1), 0, 'overgrow', FALSE);
@@ -21,7 +21,7 @@ INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id F
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 3), 0, 'overgrow', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 3), 1, 'chlorophyll', TRUE);
 
-INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (4, 'charmander', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png', 'Lizard Pokémon', 6, 85, 'Llamita', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
+INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (4, 'charmander', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png', 'Lizard Pokémon', 6, 85, 'Little Flame', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
 INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 4), 0, 'fire', 1);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 4), 0, 'blaze', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 4), 1, 'solar-power', TRUE);
@@ -39,7 +39,7 @@ INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id F
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 6), 0, 'blaze', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 6), 1, 'solar-power', TRUE);
 
-INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (7, 'squirtle', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', 'Tiny Turtle Pokémon', 5, 90, 'Colita', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
+INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (7, 'squirtle', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png', 'Tiny Turtle Pokémon', 5, 90, 'Little Shell', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
 INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 7), 0, 'water', 1);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 7), 0, 'torrent', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 7), 1, 'rain-dish', TRUE);
@@ -56,7 +56,7 @@ INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id F
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 9), 0, 'torrent', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 9), 1, 'rain-dish', TRUE);
 
-INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (10, 'caterpie', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png', 'Worm Pokémon', 3, 29, 'Oruga', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
+INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (10, 'caterpie', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png', 'Worm Pokémon', 3, 29, 'Little Worm', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
 INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 10), 0, 'bug', 1);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 10), 0, 'shield-dust', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 10), 1, 'run-away', TRUE);
@@ -110,7 +110,7 @@ INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 18), 1, 'tangled-feet', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 18), 2, 'big-pecks', TRUE);
 
-INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (19, 'rattata', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png', 'Mouse Pokémon', 3, 35, 'Ratita', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
+INSERT INTO pokemon (pokeapi_id, name, sprite_url, category, height, weight, local_name, region, version, created_at, updated_at) VALUES (19, 'rattata', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png', 'Mouse Pokémon', 3, 35, 'Little Rat', 'Kanto', 0, TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00', TIMESTAMP WITH TIME ZONE '2026-01-01 00:00:00+00');
 INSERT INTO pokemon_type (pokemon_id, position, name, slot) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 19), 0, 'normal', 1);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 19), 0, 'run-away', FALSE);
 INSERT INTO pokemon_ability (pokemon_id, position, name, hidden) VALUES ((SELECT id FROM pokemon WHERE pokeapi_id = 19), 1, 'guts', FALSE);

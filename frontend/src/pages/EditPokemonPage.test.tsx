@@ -38,9 +38,9 @@ function renderEdit() {
   );
   return renderWithProviders(
     <Routes>
-      <Route path="/mis-pokemon/:id/editar" element={<EditPokemonPage />} />
+      <Route path="/my-pokemon/:id/edit" element={<EditPokemonPage />} />
     </Routes>,
-    { route: '/mis-pokemon/1/editar' },
+    { route: '/my-pokemon/1/edit' },
   );
 }
 
@@ -59,13 +59,13 @@ describe('EditPokemonPage', () => {
       if (request.method === 'PUT') requests();
     });
     renderEdit();
-    const tags = await screen.findByLabelText('Etiquetas');
+    const tags = await screen.findByLabelText('Tags');
 
     await userEvent.clear(tags);
     await userEvent.type(tags, 'a, b, c, d, e, f, g, h, i, j, k');
-    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(await screen.findByText('Máximo 10 etiquetas')).toBeInTheDocument();
+    expect(await screen.findByText('At most 10 tags')).toBeInTheDocument();
     expect(requests).not.toHaveBeenCalled();
     server.events.removeAllListeners();
   });
@@ -86,10 +86,10 @@ describe('EditPokemonPage', () => {
       ),
     );
 
-    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
     expect(await screen.findByText('must be at most 100 characters')).toBeInTheDocument();
-    expect(screen.getByLabelText('Región')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByLabelText('Region')).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('shows a reload message and blocks saving on a version conflict (409)', async () => {
@@ -101,9 +101,9 @@ describe('EditPokemonPage', () => {
       ),
     );
 
-    await userEvent.click(screen.getByRole('button', { name: 'Guardar' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Otra persona modificó');
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Guardar' })).toBeDisabled());
+    expect(await screen.findByRole('alert')).toHaveTextContent('Someone else changed this Pokémon');
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled());
   });
 });

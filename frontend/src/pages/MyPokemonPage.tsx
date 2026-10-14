@@ -47,12 +47,12 @@ export function MyPokemonPage() {
   const remove = useMutation({
     mutationFn: (id: number) => deleteLocalPokemon(id),
     onSuccess: () => {
-      toast.show('Pokémon eliminado');
+      toast.show('Pokémon deleted');
       setPendingDelete(null);
       void queryClient.invalidateQueries({ queryKey: ['local'] });
     },
     onError: (error) => {
-      toast.show(error instanceof ApiError ? error.message : 'No se pudo eliminar', 'error');
+      toast.show(error instanceof ApiError ? error.message : 'Could not delete', 'error');
       setPendingDelete(null);
     },
   });
@@ -62,30 +62,30 @@ export function MyPokemonPage() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 id="mine-title" className="text-2xl font-bold tracking-tight">
-            Mis Pokémon
+            My Pokémon
           </h1>
-          <p className="text-sm text-slate-600">Catálogo local con tus propios datos.</p>
+          <p className="text-sm text-slate-600">Your local catalogue with your own data.</p>
         </div>
       </header>
 
       <form
         role="search"
-        aria-label="Buscar Pokémon locales"
+        aria-label="Buscar Local Pokémon"
         className="grid gap-3 rounded-xl bg-white p-4 shadow-sm sm:grid-cols-3"
         onSubmit={(event) => event.preventDefault()}
       >
         <label className="block text-sm font-medium text-slate-800">
-          Nombre
+          Name
           <input
             type="search"
             value={name}
             onChange={(event) => updateFilter('name', event.target.value)}
-            placeholder="Nombre o nombre local"
+            placeholder="Name or local name"
             className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
           />
         </label>
         <label className="block text-sm font-medium text-slate-800">
-          Región
+          Region
           <input
             value={region}
             onChange={(event) => updateFilter('region', event.target.value)}
@@ -94,7 +94,7 @@ export function MyPokemonPage() {
           />
         </label>
         <label className="block text-sm font-medium text-slate-800">
-          Etiqueta
+          Tag
           <input
             value={tag}
             onChange={(event) => updateFilter('tag', event.target.value)}
@@ -104,7 +104,7 @@ export function MyPokemonPage() {
         </label>
       </form>
 
-      {query.isPending && <Spinner label="Cargando tus Pokémon" />}
+      {query.isPending && <Spinner label="Loading your Pokémon" />}
 
       {query.isError && (
         <ErrorState
@@ -115,11 +115,11 @@ export function MyPokemonPage() {
 
       {query.isSuccess && query.data.content.length === 0 && (
         <EmptyState
-          title="No hay resultados"
-          description="Guarda Pokémon desde el catálogo o cambia los filtros."
+          title="No results"
+          description="Save Pokémon from the catalogue or change the filters."
         >
           <Link to="/pokedex" className="font-medium text-slate-900 underline">
-            Ir al catálogo
+            Go to the catalogue
           </Link>
         </EmptyState>
       )}
@@ -128,23 +128,23 @@ export function MyPokemonPage() {
         <>
           <div className="overflow-x-auto rounded-xl bg-white shadow-sm">
             <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <caption className="sr-only">Pokémon locales</caption>
+              <caption className="sr-only">Local Pokémon</caption>
               <thead className="bg-slate-50 text-left text-slate-600">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">
                     Pokémon
                   </th>
                   <th scope="col" className="px-4 py-3 font-medium">
-                    Nombre local
+                    Local name
                   </th>
                   <th scope="col" className="px-4 py-3 font-medium">
-                    Región
+                    Region
                   </th>
                   <th scope="col" className="px-4 py-3 font-medium">
-                    Etiquetas
+                    Tags
                   </th>
                   <th scope="col" className="px-4 py-3">
-                    <span className="sr-only">Acciones</span>
+                    <span className="sr-only">Actions</span>
                   </th>
                 </tr>
               </thead>
@@ -176,10 +176,10 @@ export function MyPokemonPage() {
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       {isAuthenticated && (
                         <Link
-                          to={`/mis-pokemon/${pokemon.id}/editar`}
+                          to={`/my-pokemon/${pokemon.id}/edit`}
                           className="mr-3 font-medium text-slate-900 underline"
                         >
-                          Editar<span className="sr-only"> {pokemon.name}</span>
+                          Edit<span className="sr-only"> {pokemon.name}</span>
                         </Link>
                       )}
                       <AdminOnly>
@@ -188,7 +188,7 @@ export function MyPokemonPage() {
                           onClick={() => setPendingDelete(pokemon)}
                           className="font-medium text-red-700 underline"
                         >
-                          Borrar<span className="sr-only"> {pokemon.name}</span>
+                          Delete<span className="sr-only"> {pokemon.name}</span>
                         </button>
                       </AdminOnly>
                     </td>
@@ -212,9 +212,9 @@ export function MyPokemonPage() {
 
       <ConfirmDialog
         open={pendingDelete !== null}
-        title="¿Borrar este Pokémon?"
-        description={`Se eliminará ${pendingDelete ? capitalize(pendingDelete.name) : ''} de tu catálogo local. Esta acción no se puede deshacer.`}
-        confirmLabel="Borrar"
+        title="Delete this Pokémon?"
+        description={`${pendingDelete ? capitalize(pendingDelete.name) : ''} will be removed from your local catalogue. This action cannot be undone.`}
+        confirmLabel="Delete"
         busy={remove.isPending}
         onConfirm={() => pendingDelete && remove.mutate(pendingDelete.id)}
         onCancel={() => setPendingDelete(null)}
