@@ -60,7 +60,18 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Services: `db` (Postgres 16), `api` (Spring Boot with the `docker` profile) and `web` (React served by nginx, which forwards `/api` to the backend). Host ports can be changed with `POSTGRES_PORT`, `API_PORT` and `WEB_PORT` in `.env`.
+Services: `db` (Postgres 16), `api` (Spring Boot with the `docker` profile) and `web` (React served by nginx, which forwards `/api` to the backend).
+
+### Ports
+
+| Service | Host port (in `.env`) | Container port | This setup |
+| --- | --- | --- | --- |
+| Postgres (`db`) | `POSTGRES_PORT` | 5432 | **5433** |
+| API (`api`) | `API_PORT` | 8080 | 8080 |
+| Web (`web`, nginx) | `WEB_PORT` | 80 | 8081 |
+| Vite dev server (not Docker) | fixed | — | 5173 |
+
+Containers talk to each other by service name, so the Postgres container always listens on 5432 internally; only the host port changes.
 
 ## Run locally
 
@@ -70,13 +81,13 @@ Requirements: Java 21, Maven (or `./mvnw`), Node 22, Docker (for the database an
    ```bash
    docker compose up -d db
    ```
-   The local profile connects to port 5433. Start the database on that port with `POSTGRES_PORT=5433 docker compose up -d db`.
+   Postgres is published on host port **5433**, and the `local` profile connects there (`jdbc:postgresql://localhost:5433/pokedex`). Set `POSTGRES_PORT=5433` in `.env` (see the port table above) so compose publishes it on that port.
 2. Backend (`local` profile, with demo seed data):
    ```bash
    cd backend
    SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
    ```
-3. Frontend (Vite forwards `/api` to `localhost:8080`):
+3. Frontend (Vite serves on port 5173 and forwards `/api` to `localhost:8080`):
    ```bash
    cd frontend
    npm ci
@@ -88,6 +99,7 @@ Requirements: Java 21, Maven (or `./mvnw`), Node 22, Docker (for the database an
 | What | Where |
 | --- | --- |
 | Application (Docker) | <http://localhost:8081> |
+| Postgres (host) | `localhost:5433` |
 | Application (development) | <http://localhost:5173> |
 | API | <http://localhost:8080/api/v1> |
 | Swagger UI | <http://localhost:8080/swagger-ui.html> |
@@ -114,6 +126,9 @@ The seed also loads Pokémon #1 to #20 with PokeAPI data and some own fields.
 | `JWT_EXPIRATION_MINUTES` | `60` | Token lifetime |
 | `POKEAPI_BASE_URL` | `https://pokeapi.co/api/v2` | Data source |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:5173` | Allowed origins (comma-separated) |
+| `POSTGRES_PORT` | `5432` in compose; `5433` in this setup | Host port for Postgres |
+| `API_PORT` | `8080` | Host port for the API |
+| `WEB_PORT` | `8081` | Host port for the web app |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | `pokedex` | Database |
 | `DB_URL` | `jdbc:postgresql://db:5432/pokedex` | `docker` profile only |
 | `VITE_API_URL` | empty | Backend URL for the frontend build (empty = same origin) |
