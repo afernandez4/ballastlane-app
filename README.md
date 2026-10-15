@@ -13,7 +13,6 @@ Pokédex: a Spring Boot API with hexagonal architecture and a React web app. It 
 - [Environment variables](#environment-variables)
 - [Tests and coverage](#tests-and-coverage)
 - [Technical decisions and trade-offs](#technical-decisions-and-trade-offs)
-- [Project status](#project-status)
 
 ## User stories
 
