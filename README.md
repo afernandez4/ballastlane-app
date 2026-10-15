@@ -26,7 +26,7 @@ Pokédex: a Spring Boot API with hexagonal architecture and a React web app. It 
 | Local CRUD | `GET`, `POST`, `PUT`, `PATCH`, `DELETE /api/v1/pokemon` (DELETE is ADMIN only) | My Pokémon |
 | Users and JWT | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/me` | Log in and sign up |
 
-Interactive API docs (Swagger UI): `http://localhost:8080/swagger-ui.html` while the backend is running.
+Interactive API docs (Swagger UI): `http://localhost:8080/swagger-ui.html` with Docker, or `http://localhost:8090/swagger-ui.html` with the `local` profile.
 
 ## Architecture
 
@@ -67,7 +67,8 @@ Services: `db` (Postgres 16), `api` (Spring Boot with the `docker` profile) and 
 | Service | Host port (in `.env`) | Container port | This setup |
 | --- | --- | --- | --- |
 | Postgres (`db`) | `POSTGRES_PORT` | 5432 | **5433** |
-| API (`api`) | `API_PORT` | 8080 | 8080 |
+| API in Docker (`api`) | `API_PORT` | 8080 | 8080 |
+| API run locally (`local` profile) | `server.port` in `application-local.yml` | — | **8090** |
 | Web (`web`, nginx) | `WEB_PORT` | 80 | 8081 |
 | Vite dev server (not Docker) | fixed | — | 5173 |
 
@@ -81,18 +82,21 @@ Requirements: Java 21, Maven (or `./mvnw`), Node 22, Docker (for the database an
    ```bash
    docker compose up -d db
    ```
+   The `local` profile starts the API on port **8090** (not 8080, as in Docker).
+
    Postgres is published on host port **5433**, and the `local` profile connects there (`jdbc:postgresql://localhost:5433/pokedex`). Set `POSTGRES_PORT=5433` in `.env` (see the port table above) so compose publishes it on that port.
 2. Backend (`local` profile, with demo seed data):
    ```bash
    cd backend
    SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
    ```
-3. Frontend (Vite serves on port 5173 and forwards `/api` to `localhost:8080`):
+3. Frontend (Vite serves on port 5173 and forwards `/api` to `localhost:8080` by default):
    ```bash
    cd frontend
    npm ci
-   npm run dev
+   VITE_PROXY_TARGET=http://localhost:8090 npm run dev
    ```
+   Use `VITE_PROXY_TARGET` because the local backend listens on 8090. Without it, `/api` requests go to port 8080 and fail.
 
 ## URLs
 
@@ -101,9 +105,11 @@ Requirements: Java 21, Maven (or `./mvnw`), Node 22, Docker (for the database an
 | Application (Docker) | <http://localhost:8081> |
 | Postgres (host) | `localhost:5433` |
 | Application (development) | <http://localhost:5173> |
-| API | <http://localhost:8080/api/v1> |
-| Swagger UI | <http://localhost:8080/swagger-ui.html> |
-| Health | <http://localhost:8080/actuator/health> |
+| API (Docker) | <http://localhost:8080/api/v1> |
+| API (`local` profile) | <http://localhost:8090/api/v1> |
+| Swagger UI (Docker) | <http://localhost:8080/swagger-ui.html> |
+| Swagger UI (`local` profile) | <http://localhost:8090/swagger-ui.html> |
+| Health (`local` profile) | <http://localhost:8090/actuator/health> |
 
 Example requests for any HTTP client: [`docs/api.http`](docs/api.http).
 
@@ -127,7 +133,8 @@ The seed also loads Pokémon #1 to #20 with PokeAPI data and some own fields.
 | `POKEAPI_BASE_URL` | `https://pokeapi.co/api/v2` | Data source |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:5173` | Allowed origins (comma-separated) |
 | `POSTGRES_PORT` | `5432` in compose; `5433` in this setup | Host port for Postgres |
-| `API_PORT` | `8080` | Host port for the API |
+| `API_PORT` | `8080` | Host port for the API (Docker only) |
+| `VITE_PROXY_TARGET` | `http://localhost:8080` | Where the Vite dev server forwards `/api`; set to `http://localhost:8090` for the `local` backend |
 | `WEB_PORT` | `8081` | Host port for the web app |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | `pokedex` | Database |
 | `DB_URL` | `jdbc:postgresql://db:5432/pokedex` | `docker` profile only |
